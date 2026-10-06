@@ -1,0 +1,25 @@
+# Environnements virtuels
+.venv/
+venv/
+env/
+
+# Fichiers de cache Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Fichiers de test
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Fichiers Jupyter Notebook
+.ipynb_checkpoints/
+
+# IDE et Editeurs (PyCharm)
+.idea/
+*.swp
+
+# Fichiers système macOS
+.DS_Store

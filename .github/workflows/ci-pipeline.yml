@@ -1,0 +1,41 @@
+name: ML pipeline
+
+# 1. Le Trigger (Quand déclencher le pipeline)
+on:
+  push:
+    branches:
+      - main
+      - master
+
+# 2. Les Jobs (Quelles machines lancer et que faire)
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest # Le pipeline tournera sur une machine Linux chez GitHub
+
+    steps:
+      # Etape A: récuperer le code depuis le repo github
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Etape B: Installation de l'environnement Python
+      - name: Setup python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      # Etape C: Installation des librairies de ton projet
+      - name: Install dependecies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # Filet de sécurité au cas où ces packages manqueraient dans le freeze
+          pip install pytest httpx httpx2
+
+      # Etape D: Exécution des tests automatisés
+      - name: Run pytest
+        run: pytest test_app.py
+
+      # Etape E : Construction de l'image Docker (ne s'exécute QUE si les tests passent)
+      - name: Build Docker Image
+        run: docker build -t xgb-classifier-api:latest .
